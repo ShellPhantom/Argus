@@ -1,7 +1,5 @@
 import subprocess
 
-# ip = input("Enter the IP address to ping: ")
-
 
 class Scanner:
     def __init__(self, ip_to_scan):
@@ -29,10 +27,18 @@ try:
         if menu_choice == 1:
             to_scan = input("ip to scan? ")
             scan_ip = Scanner(to_scan)
-            live_hosts = scan_ip.scan()
 
-            for host in live_hosts:
-                print(f"{host} is up")
+            print("Scanning... please wait...")
+            live_hosts = scan_ip.scan()  
+
+            print("\n--- Scan Results ---")
+    
+            if not live_hosts:
+                print("no ips up! ")
+            else:
+                for host in live_hosts:
+                    print(f"ip: {host} is up")
+            print("--------------------\n")
 
         elif menu_choice == 2:
             print("exiting...")
