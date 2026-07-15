@@ -17,13 +17,6 @@ class Scanner:
         return self.active_hosts
 
 
-argus_banner = """
-  ___   _   _  ____  _   _  ____  _____
- / _ \ | | | ||  _ \| | | ||  _ \| ____| | | || | | || |_) | |_| || |_) |  _|
-| |_| | | | || | | ||  _ <| |_| ||  _ <|  _|
- \___/ |_| |_||_| |_||_| \_\____/|_| \_\_|
-"""
-print(argus_banner)
 try:
     while True:
         try:
