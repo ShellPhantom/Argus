@@ -16,6 +16,14 @@ class Scanner:
                 self.active_hosts.append(ip)
         return self.active_hosts
 
+
+argus_banner = """
+  ___   _   _  ____  _   _  ____  _____
+ / _ \ | | | ||  _ \| | | ||  _ \| ____| | | || | | || |_) | |_| || |_) |  _|
+| |_| | | | || | | ||  _ <| |_| ||  _ <|  _|
+ \___/ |_| |_||_| |_||_| \_\____/|_| \_\_|
+"""
+print(argus_banner)
 try:
     while True:
         try:
@@ -23,16 +31,16 @@ try:
         except ValueError:
             print("invalid input")
             continue
-        
+
         if menu_choice == 1:
             to_scan = input("ip to scan? ")
             scan_ip = Scanner(to_scan)
 
             print("Scanning... please wait...")
-            live_hosts = scan_ip.scan()  
+            live_hosts = scan_ip.scan()
 
             print("\n--- Scan Results ---")
-    
+
             if not live_hosts:
                 print("no ips up! ")
             else:
@@ -43,7 +51,7 @@ try:
         elif menu_choice == 2:
             print("exiting...")
             break
-        
+
         else:
             print("invalid input")
 except KeyboardInterrupt:
