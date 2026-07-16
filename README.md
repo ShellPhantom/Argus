@@ -38,7 +38,8 @@ Once started, an interactive menu will appear in your console:
 ## Roadmap
 
 - [x] Host discovery (ping scan)
-- [ ] Multithreading for faster scans
+- [x] Validation of user-input 
 - [ ] Port scanning per host
+- [ ] Multithreading for faster scans
 - [ ] Device/vendor identification (MAC / OUI lookup)
 - [ ] Cleaner reporting and result export
