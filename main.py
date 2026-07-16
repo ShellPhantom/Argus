@@ -44,37 +44,38 @@ def validate_ip():
                 break
         if flag:
             return ip_to_validate 
+        
+if __name__ == "__main__":
+    print(BANNER)
+    try:
+        while True:
+            try:
+                menu_choice = int(input("[1] start scan\n[2]  exit:\n"))
+            except ValueError:
+                print("invalid input")
+                continue
 
-print(BANNER)
-try:
-    while True:
-        try:
-            menu_choice = int(input("[1] start scan\n[2]  exit:\n"))
-        except ValueError:
-            print("invalid input")
-            continue
+            if menu_choice == 1:
+                to_scan = validate_ip()
+                scanner = Scanner(to_scan)
 
-        if menu_choice == 1:
-            to_scan = validate_ip()
-            scanner = Scanner(to_scan)
+                print("Scanning... please wait...")       
+                live_hosts = scanner.scan()
 
-            print("Scanning... please wait...")       
-            live_hosts = scanner.scan()
+                print("\n--- Scan Results ---")
 
-            print("\n--- Scan Results ---")
+                if not live_hosts:
+                    print("no ips up! ")
+                else:
+                    for host in live_hosts:
+                        print(f"ip: {host} is up")
+                print("--------------------\n")
 
-            if not live_hosts:
-                print("no ips up! ")
+            elif menu_choice == 2:
+                print("exiting...")
+                break
+
             else:
-                for host in live_hosts:
-                    print(f"ip: {host} is up")
-            print("--------------------\n")
-
-        elif menu_choice == 2:
-            print("exiting...")
-            break
-
-        else:
-            print("invalid input")
-except KeyboardInterrupt:
-    print("\nexiting...")
+                print("invalid input")
+    except KeyboardInterrupt:
+        print("\nexiting...")
