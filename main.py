@@ -23,6 +23,7 @@ class Scanner:
                 self.active_hosts.append(ip)
         return self.active_hosts
 
+
 def validate_ip():
     while True:
         ip_to_validate = input("ip to scan? (format xxx.xxx.x ) ")
@@ -33,8 +34,8 @@ def validate_ip():
         flag = True
         for split in split_ip:
             try:
-                octet  = int(split)
-                if octet  > 255 or octet  < 0:
+                octet = int(split)
+                if octet > 255 or octet < 0:
                     flag = False
                     print("each octet must be between 0 and 255")
                     break
@@ -43,8 +44,9 @@ def validate_ip():
                 print("not valid address")
                 break
         if flag:
-            return ip_to_validate 
-        
+            return ip_to_validate
+
+
 if __name__ == "__main__":
     print(BANNER)
     try:
@@ -59,7 +61,7 @@ if __name__ == "__main__":
                 to_scan = validate_ip()
                 scanner = Scanner(to_scan)
 
-                print("Scanning... please wait...")       
+                print("Scanning... please wait...")
                 live_hosts = scanner.scan()
 
                 print("\n--- Scan Results ---")
