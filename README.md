@@ -1,15 +1,18 @@
 # Argus
 
-**What is Argus?** In Greek mythology, Argus is the hundred-eyed giant who sees everything — and that's exactly what this tool aims to become. Argus is a CLI network scanner that helps with reconnaissance by identifying devices on a network. Right now it only performs host discovery via ping scanning. Device detection, threading, and port scanning are planned for the future. I'm building this to demonstrate my skills in both programming and networking / cybersecurity.
+**What is Argus?** In Greek mythology, Argus is the hundred-eyed giant who sees everything — and that's exactly what this tool aims to become. Argus is a CLI network scanner that helps with reconnaissance by identifying devices on a network. Right now it can perform host discovery via ping scanning and now you can then do a port scan on the discovered hosts. Device detection, threading and much more is planned for the future. 
+I'm building this to demonstrate my skills in both programming and networking / cybersecurity.
 
 ## Features
 
 - **Ping scan:** sends ICMP packets to find active hosts on your network
+- **Port scan:** scans the most common ports on discovered hosts
 
 ## How It Works
 
-**The `Scanner` class** is the blueprint for a scan. It holds the target network prefix (`ip_to_scan`) and a list of discovered hosts (`active_hosts`). It builds an IP address for each host from 1 to 254, pings each one, and collects the addresses that respond. The results are printed in a user-friendly format (currently terminal only).
+**The `HostScanner` class** is the blueprint for a scan. It holds the target network prefix (`ip_to_scan`) and a list of discovered hosts (`active_hosts`). It builds an IP address for each host from 1 to 254, pings each one, and collects the addresses that respond. The results are printed in a user-friendly format (currently terminal only).
 
+**The port scan** is the new functionality that allows you to scan the most common ports on discovered hosts. After host discovery, you can choose to perform a port scan on an active host.
 
 ## How to Run
 
@@ -32,6 +35,7 @@ Once started, an interactive menu will appear in your console:
 ```
 [1] start scan --> enter the IP prefix to scan in the format 192.168.x
                    (the tool iterates through hosts 1–254; range can be changed manually)
+                  after the host discovery you can choose to scan ports on the discovered hosts
 [2] exit       --> terminate the program
 ```
 
@@ -39,7 +43,7 @@ Once started, an interactive menu will appear in your console:
 
 - [x] Host discovery (ping scan)
 - [x] Validation of user-input 
-- [ ] Port scanning per host
+- [x] Port scanning per host
 - [ ] Multithreading for faster scans
 - [ ] Device/vendor identification (MAC / OUI lookup)
 - [ ] Cleaner reporting and result export
