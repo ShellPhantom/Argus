@@ -1,3 +1,4 @@
+import socket
 import subprocess
 
 BANNER = """
@@ -67,8 +68,9 @@ if __name__ == "__main__":
                 print("\n--- Scan Results ---")
 
                 if not live_hosts:
-                    print("no ips up! ")
+                    print("no ips are up! ")
                 else:
+                    print(f"{len(live_hosts)} hosts are up!")
                     for host in live_hosts:
                         print(f"ip: {host} is up")
                 print("--------------------\n")
