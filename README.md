@@ -1,6 +1,6 @@
 # Argus
 
-**What is Argus?** In Greek mythology, Argus is the hundred-eyed giant who sees everything — and that's exactly what this tool aims to become. Argus is a CLI network scanner that helps with reconnaissance by identifying devices on a network. Right now it can perform host discovery via ping scanning and now you can then do a port scan on the discovered hosts. Device detection, threading and much more is planned for the future. 
+**What is Argus?** In Greek mythology, Argus is the hundred-eyed giant who sees everything — and that's exactly what this tool aims to become. Argus is a CLI network scanner that helps with reconnaissance by identifying devices on a network. Right now it can perform host discovery via ping scanning and now you can do port scans on the discovered hosts. Device detection, threading and much more is planned for the future. 
 I'm building this to demonstrate my skills in both programming and networking / cybersecurity.
 
 ## Features
@@ -35,7 +35,7 @@ Once started, an interactive menu will appear in your console:
 ```
 [1] start scan --> enter the IP prefix to scan in the format 192.168.x
                    (the tool iterates through hosts 1–254; range can be changed manually)
-                  after the host discovery you can choose to scan ports on the discovered hosts
+                    after the host discovery you can choose to scan ports on the discovered hosts
 [2] exit       --> terminate the program
 ```
 
