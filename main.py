@@ -40,7 +40,7 @@ def validate_ip(expected_parts):
                     break
             except ValueError:
                 flag = False
-                print("not valid address")
+                print("not a valid address")
                 break
         if flag:
             return ip_to_validate
@@ -67,10 +67,10 @@ def scan_ports_on_host(host):
         results[state].append(port)
     return results
 
-def print_port_results(found_ports):        
+def print_port_results(found_ports):
     if not found_ports["open"]:
         print("no ports are open")
-    else: 
+    else:
         print("Open ports:")
         for port in found_ports["open"]:
             print(f" {port}")
