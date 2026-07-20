@@ -45,23 +45,26 @@ def validate_ip():
             return ip_to_validate
 
 def scan_port(ip, port):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.settimeout(1)
-    result = s.connect_ex((ip, port))
-    s.close()
-
-    if result == 0:
-        return True
-    else:
-        return False
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(1)
+        s.connect((ip, port))
+        return "open"
+    except ConnectionRefusedError:
+        return "closed"
+    except socket.timeout:
+        return "filtered"
+    except OSError:
+        return "unreachable"
+    finally:
+        s.close()
 
 def scan_ports_on_host(host):
-    open_ports = []
+    results  = {"open": [], "closed": [], "filtered": []}
     for port in COMMON_PORTS:
-        p_scan = scan_port(host, port)
-        if p_scan:
-            open_ports.append(port)
-    return open_ports
+        state = scan_port(host, port)
+        results[state].append(port)
+    return results
 
 if __name__ == "__main__":
     print(BANNER)
@@ -98,12 +101,25 @@ if __name__ == "__main__":
                     target_ip = input("which host? (enter full ip): ")
                     print("Scanning Ports... please wait...\n")
                     found_ports = scan_ports_on_host(target_ip)
+                    
+                    if not found_ports["open"]:
+                        print("no ports are open")
+                    else: 
+                        print("Open ports:")
+                        for port in found_ports["open"]:
+                            print(f" {port}")
 
-                    if not found_ports:
-                        print(f"no open ports found on {target_ip}")
+                    if not found_ports["filtered"]:
+                        print("no ports are filtered")
+
                     else:
-                        for port in found_ports:
-                            print(f"port {port} is open on {target_ip}")
+                        print("Filtered ports:")
+                        for port in found_ports["filtered"]:
+                            print(f" {port}")
+                
+                    closed_ports = len(found_ports["closed"])
+                    print(f"{closed_ports} ports are closed")
+
                 elif scan_choice == 2:
                     print("skipping port scan...")
                 else:
