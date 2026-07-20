@@ -22,13 +22,14 @@ class HostScanner:
                 self.active_hosts.append(ip)
         return self.active_hosts
 
-def validate_ip():
+def validate_ip(expected_parts):
     while True:
-        ip_to_validate = input("ip to scan? (format xxx.xxx.x ) ")
+        ip_to_validate = input("ip to scan? (format xxx.xxx.x or xxx.xxx.xxx.xx) ")
         split_ip = ip_to_validate.split(".")
-        if len(split_ip) != 3:
+        if len(split_ip) != expected_parts:
             print("wrong format")
             continue
+
         flag = True
         for split in split_ip:
             try:
@@ -60,24 +61,47 @@ def scan_port(ip, port):
         s.close()
 
 def scan_ports_on_host(host):
-    results  = {"open": [], "closed": [], "filtered": []}
+    results  = {"open": [], "closed": [], "filtered": [], "unreachable": []}
     for port in COMMON_PORTS:
         state = scan_port(host, port)
         results[state].append(port)
     return results
+
+def print_port_results(found_ports):        
+    if not found_ports["open"]:
+        print("no ports are open")
+    else: 
+        print("Open ports:")
+        for port in found_ports["open"]:
+            print(f" {port}")
+
+    if not found_ports["filtered"]:
+        print("no ports are filtered")
+
+    else:
+        print("Filtered ports:")
+        for port in found_ports["filtered"]:
+            print(f" {port}")
+
+    closed_ports = len(found_ports["closed"])
+    print(f"{closed_ports} ports are closed")
+
+    if found_ports["unreachable"]:
+        unreachable_ports = len(found_ports["unreachable"])
+        print(f"{unreachable_ports} ports are unreachable")
 
 if __name__ == "__main__":
     print(BANNER)
     try:
         while True:
             try:
-                menu_choice = int(input("[1] start scan\n[2] exit:\n"))
+                menu_choice = int(input("[1] start network scan\n[2] start single host scan\n[3] exit:\n"))
             except ValueError:
                 print("invalid input")
                 continue
 
             if menu_choice == 1:
-                to_scan = validate_ip()
+                to_scan = validate_ip(3)
                 scanner = HostScanner(to_scan)
 
                 print("Scanning... please wait...")
@@ -101,24 +125,7 @@ if __name__ == "__main__":
                     target_ip = input("which host? (enter full ip): ")
                     print("Scanning Ports... please wait...\n")
                     found_ports = scan_ports_on_host(target_ip)
-                    
-                    if not found_ports["open"]:
-                        print("no ports are open")
-                    else: 
-                        print("Open ports:")
-                        for port in found_ports["open"]:
-                            print(f" {port}")
-
-                    if not found_ports["filtered"]:
-                        print("no ports are filtered")
-
-                    else:
-                        print("Filtered ports:")
-                        for port in found_ports["filtered"]:
-                            print(f" {port}")
-                
-                    closed_ports = len(found_ports["closed"])
-                    print(f"{closed_ports} ports are closed")
+                    print_port_results(found_ports)
 
                 elif scan_choice == 2:
                     print("skipping port scan...")
@@ -127,6 +134,12 @@ if __name__ == "__main__":
                     continue
 
             elif menu_choice == 2:
+                to_scan = validate_ip(4)
+                print("Scanning Ports... please wait...\n")
+                found_ports = scan_ports_on_host(to_scan)
+                print_port_results(found_ports)
+
+            elif menu_choice == 3:
                 print("exiting...")
                 break
             else:
