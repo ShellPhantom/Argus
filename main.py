@@ -46,9 +46,9 @@ def validate_ip(expected_parts):
             return ip_to_validate
 
 def scan_port(ip, port):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(1)
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(1)
         s.connect((ip, port))
         return "open"
     except ConnectionRefusedError:
