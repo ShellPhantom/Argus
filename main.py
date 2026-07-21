@@ -90,6 +90,16 @@ def print_port_results(found_ports):
         unreachable_ports = len(found_ports["unreachable"])
         print(f"{unreachable_ports} ports are unreachable")
 
+def resolve_host(prompt):
+    while True:
+        user_input = input(prompt)
+        try:
+            ip = socket.gethostbyname(user_input)
+            return ip
+        except socket.gaierror:
+            print("invalid hostname, please try again")
+
+
 if __name__ == "__main__":
     print(BANNER)
     try:
@@ -122,7 +132,7 @@ if __name__ == "__main__":
                     print("invalid input")
                     continue
                 if scan_choice == 1:
-                    target_ip = input("which host? (enter full ip): ")
+                    target_ip = resolve_host("host to scan (IP or hostname): ")
                     print("Scanning Ports... please wait...\n")
                     found_ports = scan_ports_on_host(target_ip)
                     print_port_results(found_ports)
@@ -134,7 +144,7 @@ if __name__ == "__main__":
                     continue
 
             elif menu_choice == 2:
-                to_scan = validate_ip(4)
+                to_scan = resolve_host("host to scan (IP or hostname): ")
                 print("Scanning Ports... please wait...\n")
                 found_ports = scan_ports_on_host(to_scan)
                 print_port_results(found_ports)
