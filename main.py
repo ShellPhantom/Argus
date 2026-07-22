@@ -1,5 +1,6 @@
 import socket
 import subprocess
+import platform
 
 BANNER = """
 [0;33;40m ▄▄▄ [0;37;40m [0;33;40m▄▄▄[0;90;1;40m▄[0;33;40m [0;37;40m [0;33;40m ▄[0;93;1;40m▄▄▄[0;37;40m [0;33;40m▄▄ ▄▄[0;37;40m [0;33;40m ▄▄▄[0;90;1;40m▄[0m
@@ -9,15 +10,22 @@ BANNER = """
 """
 COMMON_PORTS = [20, 21, 22, 23, 25, 53, 80, 110, 119, 123, 143, 161, 443, 445, 3306, 3389, 8080,]
 
+
+
 class HostScanner:
     def __init__(self, ip_to_scan):
         self.ip_to_scan = ip_to_scan
         self.active_hosts = []
 
     def scan(self):
+        os_for_ping = platform.system()
+        if os_for_ping == "Windows":
+            ping_command = ["ping", "-n", "1", "-w", "1000"]
+        else:
+            ping_command = ["ping", "-c", "1", "-W", "1"]
         for p in range(1, 255):
             ip = f"{self.ip_to_scan}.{p}"
-            result = subprocess.run(["ping", "-c", "1", "-w", "1", ip], capture_output=True)
+            result = subprocess.run(ping_command+ [ip], capture_output=True)
             if result.returncode == 0:
                 self.active_hosts.append(ip)
         return self.active_hosts
