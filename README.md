@@ -8,6 +8,7 @@ I'm building this to demonstrate my skills in both programming and networking / 
 - **Ping scan:** sends ICMP packets to find active hosts on your network
 - **Port scan:** scans the most common ports on discovered hosts
 - **DNS resolution:** Hostname support: accepts a hostname instead of an IP and resolves it to an address before scanning
+- **OS detection:** detects the os of the user to ensure the right ping command is used (currently only supports Windows and Linux)
 
 ## How It Works
 
