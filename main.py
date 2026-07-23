@@ -16,19 +16,24 @@ class HostScanner:
     def __init__(self, ip_to_scan):
         self.ip_to_scan = ip_to_scan
         self.active_hosts = []
+        self.os_to_ping = platform.system()
+        if self.os_to_ping == "Windows":
+            self.ping_command = ["ping", "-n", "1", "-w", "1000"]
+        else:
+            self.ping_command = ["ping", "-c", "1", "-W", "1"]
 
     def scan(self):
-        os_for_ping = platform.system()
-        if os_for_ping == "Windows":
-            ping_command = ["ping", "-n", "1", "-w", "1000"]
-        else:
-            ping_command = ["ping", "-c", "1", "-W", "1"]
         for p in range(1, 255):
             ip = f"{self.ip_to_scan}.{p}"
-            result = subprocess.run(ping_command+ [ip], capture_output=True)
+            result = subprocess.run(self.ping_command+ [ip], capture_output=True)
             if result.returncode == 0:
                 self.active_hosts.append(ip)
         return self.active_hosts
+
+    def ping_host(self, ip):
+        result = subprocess.run(self.ping_command + [ip], capture_output=True)
+        if result.returncode == 0:
+            return ip
 
 def validate_ip(expected_parts):
     while True:
@@ -113,7 +118,7 @@ if __name__ == "__main__":
     try:
         while True:
             try:
-                menu_choice = int(input("[1] start network scan\n[2] start single host scan\n[3] exit:\n"))
+                menu_choice = int(input("[1] start network scan:\n[2] start single host scan:\n[3] exit:\n..."))
             except ValueError:
                 print("invalid input")
                 continue
