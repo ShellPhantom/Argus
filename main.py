@@ -1,6 +1,6 @@
+import platform
 import socket
 import subprocess
-import platform
 from concurrent.futures import ThreadPoolExecutor
 
 BANNER = """
@@ -65,7 +65,7 @@ def scan_port(ip, port):
         return "open"
     except ConnectionRefusedError:
         return "closed"
-    except socket.timeout:
+    except TimeoutError:
         return "filtered"
     except OSError:
         return "unreachable"
