@@ -1,6 +1,7 @@
 import socket
 import subprocess
 import platform
+from concurrent.futures import ThreadPoolExecutor
 
 BANNER = """
 [0;33;40m ▄▄▄ [0;37;40m [0;33;40m▄▄▄[0;90;1;40m▄[0;33;40m [0;37;40m [0;33;40m ▄[0;93;1;40m▄▄▄[0;37;40m [0;33;40m▄▄ ▄▄[0;37;40m [0;33;40m ▄▄▄[0;90;1;40m▄[0m
@@ -9,8 +10,6 @@ BANNER = """
 [0;33;40m▀▀ ▀▀[0;37;40m [0;33;40m▀▀ ▀▀[0;37;40m [0;90;1;40m▀[0;33;40m▀▀▀[0;90;1;40m▀[0;37;40m [0;33;40m▀▀▀▀ [0;37;40m [0;90;1;40m▀[0;33;40m▀▀▀[0;90;1;40m▀[0m
 """
 COMMON_PORTS = [20, 21, 22, 23, 25, 53, 80, 110, 119, 123, 143, 161, 443, 445, 3306, 3389, 8080,]
-
-
 
 class HostScanner:
     def __init__(self, ip_to_scan):
@@ -23,12 +22,12 @@ class HostScanner:
             self.ping_command = ["ping", "-c", "1", "-W", "1"]
 
     def scan(self):
-        for p in range(1, 255):
-            ip = f"{self.ip_to_scan}.{p}"
-            result = subprocess.run(self.ping_command+ [ip], capture_output=True)
-            if result.returncode == 0:
-                self.active_hosts.append(ip)
-        return self.active_hosts
+        ip_list = [f"{self.ip_to_scan}.{p}" for p in range(1,255) ]
+        with ThreadPoolExecutor(max_workers=50) as executor:
+            pool_result = executor.map(self.ping_host,ip_list)
+            up_hosts = [ips for ips in pool_result if ips is not None]
+            self.active_hosts = up_hosts
+        return up_hosts
 
     def ping_host(self, ip):
         result = subprocess.run(self.ping_command + [ip], capture_output=True)
