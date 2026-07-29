@@ -80,8 +80,8 @@ def print_port_results(found_ports,ip):
         print("Open ports:")
         for port in found_ports["open"]:
             banner = grab_banner(ip, port)
-            if
-                print(f" {port} service: {grab_banner(ip, port)}")
+            if banner:
+                print(f" {port} service: {banner}")
             else:
                 print(f" {port} service: unknown")
 
