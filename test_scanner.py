@@ -1,10 +1,18 @@
+from cgi import valid_boundary
+
 from scanner import validate_ip
 
-#HappyPath
-def test_validate_ip_3():
-    result3 = validate_ip("192.168.2", 3)
-    assert result3 == True
+#happyPath
+def test_valid_prefix_3_parts():
+    assert validate_ip("192.168.2", 3) == True
 
-def test_validate_ip_4():
-    result4 = validate_ip("192.168.2.1", 4)
-    assert result4 == True
+def test_valid_full_ip_4_parts():
+    assert validate_ip("192.168.2.1", 4) == True
+
+#unhappyPath
+
+def test_valid_ip_too_few_parts():
+    assert validate_ip("192.168", 3) == False
+
+def test_valid_ip_too_many_parts():
+    assert validate_ip("192.168.2.1.1", 4) == False
