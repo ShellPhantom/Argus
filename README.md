@@ -2,7 +2,7 @@
 
 **What is Argus?** In Greek mythology, Argus is the hundred-eyed giant who sees everything — and that's exactly what this tool aims to become. Argus is a CLI network scanner that helps with reconnaissance by identifying devices on a network. Right now it can perform host discovery via ping scanning, and you can then run port scans on the discovered hosts. Device detection, service fingerprinting and much more are planned for the future.
 I'm building this to demonstrate my skills in both programming and networking / cybersecurity.
-
+##
 
 
 ## Disclaimer: For educational purposes and authorized testing only. Only scan systems you own or have permission to test.
