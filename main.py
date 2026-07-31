@@ -1,10 +1,10 @@
 from banner import BANNER
 from scanner import (
     HostScanner,
+    get_ip,
     print_port_results,
     resolve_host,
     scan_ports_on_host,
-    validate_ip,
 )
 
 if __name__ == "__main__":
@@ -18,7 +18,7 @@ if __name__ == "__main__":
                 continue
 
             if menu_choice == 1:
-                to_scan = validate_ip(3)
+                to_scan = get_ip(3)
                 scanner = HostScanner(to_scan)
 
                 print("Scanning... please wait...")

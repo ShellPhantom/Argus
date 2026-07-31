@@ -28,28 +28,25 @@ class HostScanner:
         if result.returncode == 0:
             return ip
 
-def validate_ip(expected_parts):
+def get_ip(expected_parts):
     while True:
-        ip_to_validate = input("ip to scan? (format xxx.xxx.x or xxx.xxx.xxx.xx) ")
-        split_ip = ip_to_validate.split(".")
-        if len(split_ip) != expected_parts:
-            print("wrong format")
-            continue
+        ip_string = input("ip to scan? (format xxx.xxx.x): ")
+        if validate_ip(ip_string, expected_parts):
+            return ip_string
+        print("invalid ip format, please try again")
 
-        flag = True
-        for split in split_ip:
-            try:
-                octet = int(split)
-                if octet > 255 or octet < 0:
-                    flag = False
-                    print("each octet must be between 0 and 255")
-                    break
-            except ValueError:
-                flag = False
-                print("not a valid address")
-                break
-        if flag:
-            return ip_to_validate
+def validate_ip(ip_string, expected_parts):
+    split_ip = ip_string.split(".")
+    if len(split_ip) != expected_parts:
+        return False
+    for split in split_ip:
+        try:
+            octet = int(split)
+            if octet < 0 or octet > 255:
+                return False
+        except ValueError:
+                return False
+    return True
 
 def scan_port(ip, port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
