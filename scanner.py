@@ -24,11 +24,9 @@ class HostScanner:
         return up_hosts
 
     def ping_host(self, ip):
-        result = subprocess.run(self.ping_command + [ip], capture_output=True)
+        result = subprocess.run(self.ping_command + [ip], capture_output=True, check=False)
         if result.returncode == 0:
             return ip
-
-
 
 def validate_ip(expected_parts):
     while True:
@@ -75,13 +73,17 @@ def scan_ports_on_host(host):
         results[state].append(port)
     return results
 
-def print_port_results(found_ports):
+def print_port_results(found_ports,ip):
     if not found_ports["open"]:
         print("no ports are open")
     else:
         print("Open ports:")
         for port in found_ports["open"]:
-            print(f" {port}")
+            banner = grab_banner(ip, port)
+            if banner:
+                print(f" {port} service: {banner}")
+            else:
+                print(f" {port} service: unknown")
 
     if not found_ports["filtered"]:
         print("no ports are filtered")
@@ -106,3 +108,15 @@ def resolve_host(prompt):
             return ip
         except socket.gaierror:
             print("invalid hostname, please try again")
+
+def grab_banner(ip, port):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(1)
+    try:
+        s.connect((ip, port))
+        banner = s.recv(1024)
+        return banner.decode(errors="ignore").strip()
+    except (ConnectionRefusedError, TimeoutError, OSError):
+        return None
+    finally:
+        s.close()

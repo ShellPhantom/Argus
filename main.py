@@ -1,5 +1,11 @@
-from scanner import HostScanner, validate_ip,scan_ports_on_host,print_port_results, resolve_host
 from banner import BANNER
+from scanner import (
+    HostScanner,
+    print_port_results,
+    resolve_host,
+    scan_ports_on_host,
+    validate_ip,
+)
 
 if __name__ == "__main__":
     print(BANNER)
@@ -36,7 +42,7 @@ if __name__ == "__main__":
                     target_ip = resolve_host("host to scan (IP or hostname): ")
                     print("Scanning Ports... please wait...\n")
                     found_ports = scan_ports_on_host(target_ip)
-                    print_port_results(found_ports)
+                    print_port_results(found_ports, target_ip)
 
                 elif scan_choice == 2:
                     print("skipping port scan...")
@@ -48,7 +54,7 @@ if __name__ == "__main__":
                 to_scan = resolve_host("host to scan (IP or hostname): ")
                 print("Scanning Ports... please wait...\n")
                 found_ports = scan_ports_on_host(to_scan)
-                print_port_results(found_ports)
+                print_port_results(found_ports, to_scan)
 
             elif menu_choice == 3:
                 print("exiting...")
