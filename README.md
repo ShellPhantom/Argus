@@ -10,7 +10,7 @@ I'm building this to demonstrate my skills in both programming and networking / 
 - **Hostname support:** accepts a hostname instead of an IP and resolves it to an address before scanning
 - **Cross-platform support:** detects the operating system it runs on and uses the matching ping command (currently Windows and Linux)
 - **Multithreading:** scans hosts in parallel instead of one after another, which makes network scans much faster
-- ** Passive Banner Grabbing:** attempts to grab banners from open ports to identify services
+- **Passive Banner Grabbing:** attempts to grab banners from open ports to identify services
 
 ## How It Works
 
