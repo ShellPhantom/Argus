@@ -117,3 +117,27 @@ def grab_banner(ip, port):
         return None
     finally:
         s.close()
+
+
+def get_single_ports(port_string):
+    ports_to_scan = []
+    split_ports = port_string.split(",")
+    for port in split_ports:
+        try:
+            port_number = int(port)
+            if 1 <= port_number <= 65535:
+                ports_to_scan.append(port_number)
+            else:
+                print(f"{port} is out of range")
+        except ValueError:
+            print(f"{port} is not a number")
+    return ports_to_scan
+
+def get_port():
+    while True:
+        port_string = input("Which ports you want to scan? (format: x,x,x) ")
+        user_ports = get_single_ports(port_string)
+        if user_ports:
+            return port_string
+        print("invalid ports, please try again")
+
