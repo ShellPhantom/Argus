@@ -1,3 +1,4 @@
-try.py
+.pytest_cache/
+.ruff_cache/
 venv/
 __pycache__/

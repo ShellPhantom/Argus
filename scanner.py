@@ -63,9 +63,9 @@ def scan_port(ip, port):
     finally:
         s.close()
 
-def scan_ports_on_host(host):
+def scan_ports_on_host(host, ports):
     results  = {"open": [], "closed": [], "filtered": [], "unreachable": []}
-    for port in COMMON_PORTS:
+    for port in ports:
         state = scan_port(host, port)
         results[state].append(port)
     return results
@@ -138,6 +138,5 @@ def get_port():
         port_string = input("Which ports you want to scan? (format: x,x,x) ")
         user_ports = get_single_ports(port_string)
         if user_ports:
-            return port_string
+            return user_ports
         print("invalid ports, please try again")
-
