@@ -1,3 +1,5 @@
+from sys import prefix
+
 from banner import BANNER
 from scanner import (HostScanner,get_ip,print_port_results,resolve_host,scan_ports_on_host,COMMON_PORTS, get_port)
 
@@ -6,6 +8,7 @@ if __name__ == "__main__":
     try:
         while True:
             try:
+                print("Welcome to Argus! Please select an option:")
                 menu_choice = int(input("[1] start network scan:\n[2] start single host scan:\n[3] exit:\n..."))
             except ValueError:
                 print("invaid input")
@@ -45,18 +48,28 @@ if __name__ == "__main__":
                     continue
 
             elif menu_choice == 2:
-                to_scan = resolve_host("host to scan (IP or hostname): ")
-                print("Scanning Ports... please wait...\n")
-                which_ports = input("scan common ports or custom ports?\n[1] common ports\n[2] custom ports\n...")
-                if which_ports == "1":
-                    ports = COMMON_PORTS
-                elif which_ports == "2":
-                    ports = get_port()
-                else:
-                    print("invalid input")
-                    continue
-                found_ports = scan_ports_on_host(to_scan, ports)
-                print_port_results(found_ports, to_scan)
+                while True:
+                    to_scan = resolve_host("host to scan (IP or hostname): ")
+                    print("Scanning Ports... please wait...\n")
+                    which_ports = input("scan common ports or custom ports?\n[1] common ports\n[2] custom ports\n...")
+                    if which_ports == "1":
+                        ports = COMMON_PORTS
+                    elif which_ports == "2":
+                        ports = get_port()
+                    else:
+                        print("invalid input")
+                        continue
+                    found_ports = scan_ports_on_host(to_scan, ports)
+                    print_port_results(found_ports, to_scan)
+
+                    second_scan = input("\ndo you want to scan another host?\n[1] yes\n[2] no\n...")
+                    if second_scan == "1":
+                        print("starting new scan...")
+                    elif second_scan == "2":
+                        break
+                    else:
+                        print("\ninvalid input")
+                        break
 
             elif menu_choice == 3:
                 print("exiting...")
