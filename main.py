@@ -57,7 +57,7 @@ if __name__ == "__main__":
                     continue
                 found_ports = scan_ports_on_host(to_scan, ports)
                 print_port_results(found_ports, to_scan)
-                save_question = input("do you want to save your report as json? \n[1] yes\n [2] no\n")
+                save_question = input("do you want to save your report as json? \n[1] yes\n[2] no\n")
                 if save_question == "1":
                     print("saving and exporting as json...")
                     save_results(to_scan, found_ports)
