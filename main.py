@@ -1,7 +1,5 @@
-from sys import prefix
-
 from banner import BANNER
-from scanner import (HostScanner,get_ip,print_port_results,resolve_host,scan_ports_on_host,COMMON_PORTS, get_port)
+from scanner import (HostScanner,get_ip,print_port_results,resolve_host,scan_ports_on_host,COMMON_PORTS, get_port, save_results)
 
 if __name__ == "__main__":
     print(BANNER)
@@ -61,7 +59,14 @@ if __name__ == "__main__":
                         continue
                     found_ports = scan_ports_on_host(to_scan, ports)
                     print_port_results(found_ports, to_scan)
-
+                    save_question = input("do you want to save your report as json? \n[1] yes\n[2] no\n")
+                    if save_question == "1":
+                        print("saving and exporting as json...")
+                        save_results(to_scan, found_ports)
+                    elif save_question == "2":
+                        print("not saving...")
+                    else:
+                        print("invalid input! ")
                     second_scan = input("\ndo you want to scan another host?\n[1] yes\n[2] no\n...")
                     if second_scan == "1":
                         print("starting new scan...")
@@ -70,7 +75,6 @@ if __name__ == "__main__":
                     else:
                         print("\ninvalid input")
                         break
-
             elif menu_choice == 3:
                 print("exiting...")
                 break
