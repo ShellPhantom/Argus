@@ -1,6 +1,7 @@
 import platform
 import socket
 import subprocess
+import json
 from concurrent.futures import ThreadPoolExecutor
 
 COMMON_PORTS = [20, 21, 22, 23, 25, 53, 80, 110, 119, 123, 143, 161, 443, 445, 3306, 3389, 8080,]
@@ -140,3 +141,8 @@ def get_port():
         if user_ports:
             return user_ports
         print("invalid ports, please try again")
+
+def save_results(host, found_ports):
+    json_result = {"host": host} | found_ports
+    with open("scan_result.json", "w") as f:
+        json.dump(json_result, f, indent=4)
