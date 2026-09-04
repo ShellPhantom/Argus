@@ -2,6 +2,7 @@ import platform
 import socket
 import subprocess
 import json
+import ipaddress
 from concurrent.futures import ThreadPoolExecutor
 
 COMMON_PORTS = [20, 21, 22, 23, 25, 53, 80, 110, 119, 123, 143, 161, 443, 445, 3306, 3389, 8080,]
@@ -17,7 +18,8 @@ class HostScanner:
             self.ping_command = ["ping", "-c", "1", "-W", "1"]
 
     def scan(self):
-        ip_list = [f"{self.ip_to_scan}.{p}" for p in range(1,255) ]
+        network = ipaddress.ip_network(self.ip_to_scan, strict=False)
+        ip_list = [str(host) for host in network.hosts()]
         with ThreadPoolExecutor(max_workers=50) as executor:
             pool_result = executor.map(self.ping_host,ip_list)
             up_hosts = [ips for ips in pool_result if ips is not None]
@@ -29,25 +31,14 @@ class HostScanner:
         if result.returncode == 0:
             return ip
 
-def get_ip(expected_parts):
+def get_network():
     while True:
-        ip_string = input("ip to scan? (format xxx.xxx.x): ")
-        if validate_ip(ip_string, expected_parts):
-            return ip_string
-        print("invalid ip format, please try again")
-
-def validate_ip(ip_string, expected_parts):
-    split_ip = ip_string.split(".")
-    if len(split_ip) != expected_parts:
-        return False
-    for split in split_ip:
+        ip_string = input("network to scan? (format xxx.xxx.x/xx): ")
         try:
-            octet = int(split)
-            if octet < 0 or octet > 255:
-                return False
+            ipaddress.ip_network(ip_string, strict=False)
+            return ip_string
         except ValueError:
-                return False
-    return True
+            print("invalid network, please try again")
 
 def scan_port(ip, port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
