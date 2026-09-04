@@ -1,9 +1,7 @@
 # Argus
 
-**What is Argus?** In Greek mythology, Argus is the hundred-eyed giant who sees everything — and that's exactly what this tool aims to become. Argus is a CLI network scanner that helps with reconnaissance by identifying devices on a network. Right now it can perform host discovery via ping scanning, and you can then run port scans on the discovered hosts. Device detection, service fingerprinting and much more are planned for the future.
+**What is Argus?** In Greek mythology, Argus is the hundred-eyed giant who sees everything — and that's exactly what this tool aims to become. Argus is a CLI network scanner that helps with reconnaissance by identifying devices on a network. Right now it can perform host discovery via ping scanning, and you can then run port scans on the discovered hosts. Device detection, active service fingerprinting and much more are planned for the future.
 I'm building this to demonstrate my skills in both programming and networking / cybersecurity.
-##
-
 
 ## Disclaimer: For educational purposes and authorized testing only. Only scan systems you own or have permission to test.
 
@@ -19,7 +17,7 @@ I'm building this to demonstrate my skills in both programming and networking / 
 
 ## How It Works
 
-**The `HostScanner` class** is the blueprint for a scan. It holds the target network prefix (`ip_to_scan`) and a list of discovered hosts (`active_hosts`). It builds an IP address for each host from 1 to 254, and pings them parallel using a thread poolpings and collects the addresses that respond. The results are printed in a user-friendly format (currently terminal only).
+**The `HostScanner` class** is the blueprint for a scan. It holds the target network in CIDR notation (ip_to_scan) and a list of discovered hosts (active_hosts). It expands the network into its individual host addresses using Python's ipaddress module, pings them in parallel using a thread pool, and collects the addresses that respond. The results are printed to the terminal and can optionally be exported as JSON.
 
 **The port scan** allows you to scan the most common ports on discovered hosts. After host discovery, you can choose to perform a port scan on an active host.
 
@@ -44,10 +42,10 @@ python main.py
 Once started, an interactive menu will appear in your console:
 
 ```
-[1] start network scan --> enter the IP prefix to scan in the format 192.168.x
-                           (the tool iterates through hosts 1–254; range can be changed manually)
-                           after the host discovery you can choose to scan ports on the discovered hosts
-[2] start single host scan --> enter IP or name of a single host to scan for open ports
+[1] start network scan --> enter the network to scan in CIDR notation (e.g. 192.168.2.0/24)
+                           after host discovery you can choose to scan ports on a discovered host
+
+[2] start single host scan --> enter an IP or hostname of a single host to scan for open ports
                     
 [3] exit --> terminate the program
 ```
@@ -59,6 +57,6 @@ Once started, an interactive menu will appear in your console:
 - [x] Port scanning per host
 - [x] DNS resolution for hostnames 
 - [x] Multithreading for faster scans
-- [ ] Service fingerprinting / banner grabbing
-- [ ] Cleaner reporting and result export
+- [x] Cleaner reporting and result export
+- [x] Service fingerprinting / banner grabbing (Passive only)
 - [ ] Device/vendor identification (MAC / OUI lookup)
