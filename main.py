@@ -1,3 +1,5 @@
+from random import choice
+
 from banner import BANNER
 from scanner import (HostScanner,get_network,print_port_results,resolve_host,scan_ports_on_host,COMMON_PORTS, get_port, save_results)
 
@@ -25,19 +27,28 @@ if __name__ == "__main__":
                     print("no ips are up! ")
                 else:
                     print(f"{len(live_hosts)} hosts are up!")
-                    for host in live_hosts:
-                        print(f"ip: {host} is up")
+                    for position,host in enumerate(live_hosts, start=1):
+                        print(f"[{position}] {host}")
                 print("--------------------\n")
                 try:
-                    scan_choice = int(input("do you want to scan ports on the live hosts?\n[1] yes\n[2] no "))
+                    scan_choice = int(input("do you want to scan ports on the found hosts?\n[1] yes\n[2] no \n"))
                 except ValueError:
                     print("invalid input")
                     continue
                 if scan_choice == 1:
-                    target_ip = resolve_host("host to scan (IP or hostname): ")
-                    print("Scanning Ports... please wait...\n")
-                    found_ports = scan_ports_on_host(target_ip, COMMON_PORTS)
-                    print_port_results(found_ports, target_ip)
+                    try:
+                        choice = int(input("type the number [x] you want to investigate more: "))
+                    except ValueError:
+                        print("invalid input only numbers! ")
+                        continue
+                    if 1 <= choice <= len(live_hosts):
+                        picked_target_ip = live_hosts[choice - 1]
+                        found_ports = scan_ports_on_host(picked_target_ip, COMMON_PORTS)
+                        print(f"you picked {picked_target_ip}")
+                        print("Scanning Ports... please wait...\n")
+                        print_port_results(found_ports, picked_target_ip)
+                    else:
+                        print("invalid number")
 
                 elif scan_choice == 2:
                     print("skipping port scan...")
