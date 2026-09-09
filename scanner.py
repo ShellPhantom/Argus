@@ -84,6 +84,8 @@ def print_port_results(found_ports,ip):
 
     closed_ports = len(found_ports["closed"])
     print(f"{closed_ports} ports are closed")
+    print("--------------------\n")
+    print(f"{len(found_ports['open'])} ports are open\n")
 
     if found_ports["unreachable"]:
         unreachable_ports = len(found_ports["unreachable"])

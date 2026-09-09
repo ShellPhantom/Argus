@@ -26,15 +26,16 @@ if __name__ == "__main__":
                 if not live_hosts:
                     print("no ips are up! ")
                 else:
-                    print(f"{len(live_hosts)} hosts are up!")
                     for position,host in enumerate(live_hosts, start=1):
                         print(f"[{position}] {host}")
                 print("--------------------\n")
+                print(f"Scan completed: {len(live_hosts)} hosts are up!\n")
                 try:
                     scan_choice = int(input("do you want to scan ports on the found hosts?\n[1] yes\n[2] no \n"))
                 except ValueError:
                     print("invalid input")
                     continue
+
                 if scan_choice == 1:
                     try:
                         choice = int(input("type the number [x] you want to investigate more: "))
