@@ -53,7 +53,6 @@ Once started, an interactive menu will appear in your console:
 ## Roadmap
 
 - [x] Host discovery (ping scan)
-- [x] Validation of user-input 
 - [x] Port scanning per host
 - [x] DNS resolution for hostnames 
 - [x] Multithreading for faster scans
