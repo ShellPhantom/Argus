@@ -1,7 +1,6 @@
-from random import choice
-
 from banner import BANNER
 from scanner import (HostScanner,get_network,print_port_results,resolve_host,scan_ports_on_host,COMMON_PORTS, get_port, save_results)
+import time
 
 if __name__ == "__main__":
     print(BANNER)
@@ -15,12 +14,12 @@ if __name__ == "__main__":
                 continue
 
             if menu_choice == 1:
+                start_scan_time = time.time()
                 to_scan = get_network()
                 scanner = HostScanner(to_scan)
 
                 print("Scanning... please wait...")
                 live_hosts = scanner.scan()
-
                 print("\n--- Scan Results ---")
 
                 if not live_hosts:
@@ -30,6 +29,9 @@ if __name__ == "__main__":
                         print(f"[{position}] {host}")
                 print("--------------------\n")
                 print(f"Scan completed: {len(live_hosts)} hosts are up!\n")
+                end_scan_time = time.time()
+                elapsed_scan_time = end_scan_time - start_scan_time
+                print(f"scan finished in: {elapsed_scan_time:.1f} seconds")
                 try:
                     scan_choice = int(input("do you want to scan ports on the found hosts?\n[1] yes\n[2] no \n"))
                 except ValueError:
@@ -43,11 +45,15 @@ if __name__ == "__main__":
                         print("invalid input only numbers! ")
                         continue
                     if 1 <= choice <= len(live_hosts):
+                        start_port_time = time.time()
                         picked_target_ip = live_hosts[choice - 1]
                         found_ports = scan_ports_on_host(picked_target_ip, COMMON_PORTS)
                         print(f"you picked {picked_target_ip}")
                         print("Scanning Ports... please wait...\n")
                         print_port_results(found_ports, picked_target_ip)
+                        end_port_time = time.time()
+                        elapsed_port_time = end_port_time - start_port_time
+                        print(f"port scan finished in: {elapsed_port_time:.1f} seconds")
                     else:
                         print("invalid number")
 
@@ -60,7 +66,6 @@ if __name__ == "__main__":
             elif menu_choice == 2:
                 while True:
                     to_scan = resolve_host("host to scan (IP or hostname): ")
-                    print("Scanning Ports... please wait...\n")
                     which_ports = input("scan common ports or custom ports?\n[1] common ports\n[2] custom ports\n...")
                     if which_ports == "1":
                         ports = COMMON_PORTS
@@ -69,8 +74,13 @@ if __name__ == "__main__":
                     else:
                         print("invalid input")
                         continue
+                    print("Scanning Ports... please wait...\n")
+                    start_single_time = time.time()
                     found_ports = scan_ports_on_host(to_scan, ports)
                     print_port_results(found_ports, to_scan)
+                    end_single_time = time.time()
+                    elapsed_single_time = end_single_time - start_single_time
+                    print(f"port scan finished in: {elapsed_single_time:.1f} seconds")
                     save_question = input("do you want to save your report as json? \n[1] yes\n[2] no\n")
                     if save_question == "1":
                         print("saving and exporting as json...")
