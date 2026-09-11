@@ -8,8 +8,8 @@ I'm building this to demonstrate my skills in both programming and networking / 
 ## Features
 
 - **Ping scan:** sends ICMP packets to find active hosts on your network
-- **Port scan:** scans the most common ports on discovered hosts
-- **Hostname support:** accepts a hostname instead of an IP and resolves it to an address before scanning
+- **Port scan:** scans the most common ports or a user-defined list of ports on discovered hosts
+- **Hostname support:** can accept hostnames instead of an IP and resolves it to an address before scanning
 - **Cross-platform support:** detects the operating system it runs on and uses the matching ping command (currently Windows and Linux)
 - **Multithreading:** scans hosts in parallel instead of one after another, which makes network scans much faster
 - **Banner Grabbing:** attempts to grab banners to identify services
