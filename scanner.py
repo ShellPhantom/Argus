@@ -6,6 +6,7 @@ import ipaddress
 from concurrent.futures import ThreadPoolExecutor
 
 COMMON_PORTS = [20, 21, 22, 23, 25, 53, 80, 110, 119, 123, 143, 161, 443, 445, 3306, 3389, 8080,]
+COMMON_HTTP_PORTS = [80, 8080, 8000, 8008, 81, 82]
 
 class HostScanner:
     def __init__(self, ip_to_scan):
@@ -105,13 +106,14 @@ def grab_banner(ip, port):
     s.settimeout(1)
     try:
         s.connect((ip, port))
+        if port in COMMON_HTTP_PORTS:
+            s.send(b"GET / HTTP/1.0\r\n\r\n")
         banner = s.recv(1024)
         return banner.decode(errors="ignore").strip()
     except (ConnectionRefusedError, TimeoutError, OSError):
         return None
     finally:
         s.close()
-
 
 def get_single_ports(port_string):
     ports_to_scan = []
