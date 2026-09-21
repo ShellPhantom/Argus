@@ -4,6 +4,7 @@ import subprocess
 import json
 import ipaddress
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
 
 COMMON_PORTS = [20, 21, 22, 23, 25, 53, 80, 110, 119, 123, 143, 161, 443, 445, 3306, 3389, 8080,]
 COMMON_HTTP_PORTS = [80, 8080, 8000, 8008, 81, 82]
@@ -138,6 +139,9 @@ def get_port():
         print("invalid ports, please try again")
 
 def save_results(host, found_ports):
-    json_result = {"host": host} | found_ports
-    with open("scan_result.json", "w") as f:
+    date_now = datetime.now()
+    date_name = date_now.strftime("%d-%m-%Y_%H:%M")
+    date_time = date_now.strftime("%H:%M")
+    json_result = {"scan_time": date_time} | {"host": host} | found_ports
+    with open(f"scan_result_{date_name}.json","w") as f:
         json.dump(json_result, f, indent=4)
