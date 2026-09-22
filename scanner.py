@@ -66,7 +66,7 @@ def scan_ports_on_host(host, ports):
 
 def print_port_results(found_ports,ip):
     if not found_ports["open"]:
-        print("no ports are open")
+        print("\nno ports are open")
     else:
         print("Open ports:")
         for port in found_ports["open"]:
@@ -77,21 +77,21 @@ def print_port_results(found_ports,ip):
                 print(f" {port} service: unknown")
 
     if not found_ports["filtered"]:
-        print("no ports are filtered")
+        print("\nno ports are filtered\n")
 
     else:
-        print("Filtered ports:")
+        print("\nFiltered ports:")
         for port in found_ports["filtered"]:
             print(f" {port}")
 
     closed_ports = len(found_ports["closed"])
-    print(f"{closed_ports} ports are closed")
+    print(f"{closed_ports} port(s) are closed")
     print("--------------------\n")
-    print(f"{len(found_ports['open'])} ports are open\n")
+    print(f"{len(found_ports['open'])} port(s) are open\n")
 
     if found_ports["unreachable"]:
         unreachable_ports = len(found_ports["unreachable"])
-        print(f"{unreachable_ports} ports are unreachable")
+        print(f"{unreachable_ports} port(s) are unreachable")
 
 def resolve_host(prompt):
     while True:
@@ -108,9 +108,9 @@ def grab_banner(ip, port):
     try:
         s.connect((ip, port))
         if port in COMMON_HTTP_PORTS:
-            s.send(b"GET / HTTP/1.0\r\n\r\n")
+            s.send(b"GET / HTTP/1.0\r\nHost: example\r\n\r\n")
         banner = s.recv(1024)
-        return banner.decode(errors="ignore").strip()
+        return banner.decode(errors="ignore").strip().split("\r\n\r\n", 1)[0]
     except (ConnectionRefusedError, TimeoutError, OSError):
         return None
     finally:
