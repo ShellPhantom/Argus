@@ -64,6 +64,15 @@ def scan_ports_on_host(host, ports):
         results[state].append(port)
     return results
 
+def run_network_scan(target):
+        live_hosts = HostScanner(target).scan()
+        if not live_hosts:
+            print("no ips are up! ")
+        else:
+            for position,host in enumerate(live_hosts, start=1):
+                print(f"[{position}] {host}")
+        return live_hosts
+
 def print_port_results(found_ports,ip):
     if not found_ports["open"]:
         print("\nno ports are open")

@@ -1,5 +1,5 @@
 from banner import BANNER
-from scanner import (HostScanner,get_network,print_port_results,resolve_host,scan_ports_on_host,COMMON_PORTS, get_port, save_results)
+from scanner import (HostScanner,get_network,print_port_results,resolve_host,scan_ports_on_host,COMMON_PORTS, get_port, save_results,run_network_scan)
 import time
 import argparse
 
@@ -10,12 +10,7 @@ if __name__ == "__main__":
 
     if args.target:
         if "/" in args.target:
-            live_hosts = HostScanner(args.target).scan()
-            if not live_hosts:
-                print("no ips are up! ")
-            else:
-                for position,host in enumerate(live_hosts, start=1):
-                    print(f"[{position}] {host}")
+            run_network_scan(args.target)
         else:
             cmd_single_scan = scan_ports_on_host(args.target, COMMON_PORTS)
             print_port_results(cmd_single_scan, args.target)
@@ -34,18 +29,7 @@ if __name__ == "__main__":
                 if menu_choice == 1:
                     start_scan_time = time.time()
                     to_scan = get_network()
-                    scanner = HostScanner(to_scan)
-
-                    print("Scanning... please wait...")
-                    live_hosts = scanner.scan()
-                    print("\n--- Scan Results ---")
-
-                    if not live_hosts:
-                        print("no ips are up! ")
-                    else:
-                        for position,host in enumerate(live_hosts, start=1):
-                            print(f"[{position}] {host}")
-                    print("--------------------\n")
+                    live_hosts = run_network_scan(to_scan)
                     print(f"Scan completed: {len(live_hosts)} hosts are up!\n")
                     end_scan_time = time.time()
                     elapsed_scan_time = end_scan_time - start_scan_time
