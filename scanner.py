@@ -119,7 +119,11 @@ def grab_banner(ip, port):
         if port in COMMON_HTTP_PORTS:
             s.send(b"GET / HTTP/1.0\r\nHost: example\r\n\r\n")
         banner = s.recv(1024)
-        return banner.decode(errors="ignore").strip().split("\r\n\r\n", 1)[0]
+        split_banner = banner.decode(errors="ignore").splitlines()
+        for line in split_banner:
+            if line.startswith("Server: "):
+                return line
+        return split_banner[0]
     except (ConnectionRefusedError, TimeoutError, OSError):
         return None
     finally:

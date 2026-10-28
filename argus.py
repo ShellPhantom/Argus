@@ -27,8 +27,8 @@ if __name__ == "__main__":
                     continue
 
                 if menu_choice == 1:
-                    start_scan_time = time.time()
                     to_scan = get_network()
+                    start_scan_time = time.time()
                     live_hosts = run_network_scan(to_scan)
                     print(f"Scan completed: {len(live_hosts)} hosts are up!\n")
                     end_scan_time = time.time()
@@ -47,8 +47,8 @@ if __name__ == "__main__":
                             print("invalid input only numbers! ")
                             continue
                         if 1 <= choice <= len(live_hosts):
-                            start_port_time = time.time()
                             picked_target_ip = live_hosts[choice - 1]
+                            start_port_time = time.time()
                             found_ports = scan_ports_on_host(picked_target_ip, COMMON_PORTS)
                             print(f"you picked {picked_target_ip}")
                             print("Scanning Ports... please wait...\n")
