@@ -19,7 +19,7 @@ I'm building this to demonstrate my skills in both programming and networking / 
 - **Cross-platform support:** detects the operating system it runs on and uses the matching ping command (currently Windows and Linux)
 - **Multithreading:** scans hosts in parallel instead of one after another, which makes network scans much faster
 - **Banner Grabbing:** attempts to grab banners to identify services
-- **JSON Report Export:** saves scan results in a structured JSON format for further analysis (first version is a simple list of active hosts and open ports, future versions will include more details)
+- **JSON Report Export:** saves scan results in a structured JSON format for further analysis (first version is a simple list of active hosts and open ports and found banners, future versions will include more details)
 
 ## How It Works
 
