@@ -61,7 +61,11 @@ def scan_ports_on_host(host, ports):
     results  = {"open": [], "closed": [], "filtered": [], "unreachable": []}
     for port in ports:
         state = scan_port(host, port)
-        results[state].append(port)
+        if state == "open":
+            banner = grab_banner(host, port)
+            results ["open"].append({"port": port, "banner": banner})
+        else:
+            results[state].append(port)
     return results
 
 def run_network_scan(target):
@@ -78,8 +82,9 @@ def print_port_results(found_ports,ip):
         print("\nno ports are open")
     else:
         print("Open ports:")
-        for port in found_ports["open"]:
-            banner = grab_banner(ip, port)
+        for entry in found_ports["open"]:
+            port = entry["port"]
+            banner = entry["banner"]
             if banner:
                 print(f" {port} service: {banner}")
             else:
