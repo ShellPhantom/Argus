@@ -1,5 +1,5 @@
 from banner import BANNER
-from scanner import (HostScanner,get_network,print_port_results,resolve_host,scan_ports_on_host,COMMON_PORTS, get_port, save_results,run_network_scan)
+from scanner import (HostScanner,get_network,print_port_results,resolve_host,scan_ports_on_host,COMMON_PORTS, get_port, save_results,run_network_scan, choose_ports)
 import time
 import argparse
 
@@ -48,10 +48,11 @@ if __name__ == "__main__":
                             continue
                         if 1 <= choice <= len(live_hosts):
                             picked_target_ip = live_hosts[choice - 1]
-                            start_port_time = time.time()
-                            found_ports = scan_ports_on_host(picked_target_ip, COMMON_PORTS)
+                            ports = choose_ports()
                             print(f"you picked {picked_target_ip}")
                             print("Scanning Ports... please wait...\n")
+                            start_port_time = time.time()
+                            found_ports = scan_ports_on_host(picked_target_ip, ports)
                             print_port_results(found_ports, picked_target_ip)
                             end_port_time = time.time()
                             elapsed_port_time = end_port_time - start_port_time
@@ -68,14 +69,7 @@ if __name__ == "__main__":
                 elif menu_choice == 2:
                     while True:
                         to_scan = resolve_host("host to scan (IP or hostname): ")
-                        which_ports = input("scan common ports or custom ports?\n[1] common ports\n[2] custom ports\n...")
-                        if which_ports == "1":
-                            ports = COMMON_PORTS
-                        elif which_ports == "2":
-                            ports = get_port()
-                        else:
-                            print("invalid input")
-                            continue
+                        ports = choose_ports()
                         print("Scanning Ports... please wait...\n")
                         start_single_time = time.time()
                         found_ports = scan_ports_on_host(to_scan, ports)

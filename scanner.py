@@ -166,6 +166,18 @@ def get_port():
             return user_ports
         print("invalid ports, please try again")
 
+def choose_ports():
+    while True:
+        which_ports = input("scan common, custom or all ports?\n[1] common ports\n[2] custom ports\n[3] all ports\n...")
+        if which_ports == "1":
+            return COMMON_PORTS
+        elif which_ports == "2":
+            return get_port()
+        elif which_ports == "3":
+            return list(range(1, 65536))
+        else:
+            print("invalid input")
+
 def save_results(host, found_ports):
     date_now = datetime.now()
     date_name = date_now.strftime("%d-%m-%Y_%H:%M")
