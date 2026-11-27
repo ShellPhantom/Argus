@@ -59,14 +59,24 @@ def scan_port(ip, port):
 
 def scan_ports_on_host(host, ports):
     results  = {"open": [], "closed": [], "filtered": [], "unreachable": []}
-    for port in ports:
-        state = scan_port(host, port)
-        if state == "open":
-            banner = grab_banner(host, port)
-            results ["open"].append({"port": port, "banner": banner})
-        else:
-            results[state].append(port)
-    return results
+    def scan_one(port):
+        return scan_single_port(host, port)
+    with ThreadPoolExecutor(max_workers=50) as executor:
+        pool_result = executor.map(scan_one, ports)
+        for port, state, banner in pool_result:
+            if state == "open":
+                results ["open"].append({"port": port, "banner": banner})
+            else:
+                results[state].append(port)
+        return results
+
+def scan_single_port(host, port):
+    state = scan_port(host, port)
+    if state == "open":
+        banner = grab_banner(host, port)
+        return (port,state,banner)
+    else:
+        return (port,state,None)
 
 def run_network_scan(target):
         live_hosts = HostScanner(target).scan()
@@ -118,7 +128,7 @@ def resolve_host(prompt):
 
 def grab_banner(ip, port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.settimeout(1)
+    s.settimeout(3)
     try:
         s.connect((ip, port))
         if port in COMMON_HTTP_PORTS:
